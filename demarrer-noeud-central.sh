@@ -11,7 +11,7 @@
 # Novembre 2015
 #
 
-CLASS_PATH=./build/production/SystRep/
+CLASS_PATH=./build/classes
 
 java -Djava.security.policy=./security.policy -Djava.rmi.server.codebase=file:${CLASS_PATH} -cp ${CLASS_PATH} NoeudCentralSimulateur $1
 
