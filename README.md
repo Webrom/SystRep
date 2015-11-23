@@ -1,9 +1,9 @@
-## Présentation
+## Presentation
 
-Code associé au projet d'algorithmes et Systèmes Répartis VaultChat en IMR2. 
+Code associe au projet d'algorithmes et Systemes Repartis VaultChat en IMR2.
 L'utilisation de ces sources n'est en rien obligatoire (mais reste fortement 
-conseillée). Vous êtes parfaitement libres de modifier le code, à l'exception 
-des prototypes décris dans le sujet.
+conseillee). Vous etes parfaitement libres de modifier le code, e l'exception
+des prototypes decris dans le sujet.
 
 ## Utilisation
 

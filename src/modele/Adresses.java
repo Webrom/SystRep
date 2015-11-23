@@ -6,13 +6,13 @@
 package modele;
 
 /**
- * Classe contenant les archétypes des adresses RMI
- * @author Gwénolé Lecorvé
+ * Classe contenant les archetypes des adresses RMI
+ * @author Gwenole Lecorve
  * @author David Guennec
  */
 public class Adresses {
     
-    private static final String noeud = "localhost"; // localhost // Par défaut, le simulateur lance tous les sites sur la boucle locale
+    private static final String noeud = "localhost"; // localhost // Par defaut, le simulateur lance tous les sites sur la boucle locale
     private static final String abri = "localhost"; // localhost
     private static final int port = 2020;
     

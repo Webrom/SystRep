@@ -22,7 +22,7 @@ public class SimplisteControleur implements ControleurInterface {
     
     @Override
     public void demanderSectionCritique() {
-        System.out.println(this.url + ": \tDemande de section critique enregistrée");
+        System.out.println(this.url + ": \tDemande de section critique enregistree");
         signalerAutorisation();
     }
 

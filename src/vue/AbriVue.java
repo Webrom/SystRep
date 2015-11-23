@@ -31,7 +31,7 @@ public class AbriVue extends JFrame implements Observer {
     /**
      * Creates new form AbriFenetre
      *
-     * @param backend Traitements en arrière-plan
+     * @param backend Traitements en arriere-plan
      * @param abri Abri
      */
     public AbriVue(AbriLocalInterface backend, Abri abri) {
@@ -43,7 +43,7 @@ public class AbriVue extends JFrame implements Observer {
         setResizable(false);
         setTitle("Abri - " + backend.getUrl());
         urlTextField.setText(backend.getUrl());
-        etatLabel.setText("<html><a color=red>Déconnecté</a></html>");
+        etatLabel.setText("<html><a color=red>Deconnecte</a></html>");
 
         emettreBouton.setEnabled(false);
         demarrerToggleBouton.setEnabled(false);
@@ -98,7 +98,7 @@ public class AbriVue extends JFrame implements Observer {
             }
         });
 
-        receptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Réception", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        receptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Reception", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         receptionTextPane.setContentType("text/html"); // NOI18N
         receptionTextPane.setDocument(new HTMLDocument());
@@ -115,9 +115,9 @@ public class AbriVue extends JFrame implements Observer {
             .addComponent(receptionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
         );
 
-        emissionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Émission", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        emissionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "emission", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        emettreBouton.setText("Émettre une fois");
+        emettreBouton.setText("emettre une fois");
         emettreBouton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 emettreBoutonActionPerformed(evt);
@@ -138,14 +138,14 @@ public class AbriVue extends JFrame implements Observer {
         destinataireList.setEnabled(false);
         listeScrollPane.setViewportView(destinataireList);
 
-        demarrerToggleBouton.setText("Démarrer l'émission");
+        demarrerToggleBouton.setText("Demarrer l'emission");
         demarrerToggleBouton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 demarrerToggleBoutonActionPerformed(evt);
             }
         });
 
-        stopperBouton.setText("Stopper l'émission");
+        stopperBouton.setText("Stopper l'emission");
         stopperBouton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 stopperBoutonActionPerformed(evt);
@@ -184,9 +184,9 @@ public class AbriVue extends JFrame implements Observer {
         statutPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Statut", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         etatLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        etatLabel.setText("Non connecté");
+        etatLabel.setText("Non connecte");
 
-        connectionBouton.setText("Connecter l'abri au réseau");
+        connectionBouton.setText("Connecter l'abri au reseau");
         connectionBouton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 connectionBoutonActionPerformed(evt);
@@ -261,7 +261,7 @@ public class AbriVue extends JFrame implements Observer {
                 .addComponent(emissionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        receptionPanel.getAccessibleContext().setAccessibleName("Messages reçus");
+        receptionPanel.getAccessibleContext().setAccessibleName("Messages reeus");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -310,8 +310,8 @@ public class AbriVue extends JFrame implements Observer {
         if (backend.estConnecte()) {
             try {
                 backend.deconnecterAbri();
-                etatLabel.setText("<html><a color=red>Déconnecté</a></html>");
-                connectionBouton.setText("Connecter l'abri au réseau");
+                etatLabel.setText("<html><a color=red>Deconnecte</a></html>");
+                connectionBouton.setText("Connecter l'abri au reseau");
                 if (emettreEnBoucle) {
                     emettreEnBoucle = false;
                     afficherErreur("Arret de l'emission", "L'envoi en boucle d'un message a ete interrompu en raison d'une deconnexion.");
@@ -319,18 +319,18 @@ public class AbriVue extends JFrame implements Observer {
                 ajusterEtatBoutons();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                afficherErreur("Erreur de déconnexion", ex.getMessage());
+                afficherErreur("Erreur de deconnexion", ex.getMessage());
             }
         } else {
             try {
                 backend.changerGroupe((String) groupsList.getSelectedValue());
                 backend.connecterAbri();
-                etatLabel.setText("<html><a color=green>Connecté</a></html>");
-                connectionBouton.setText("Déconnecter l'abri du réseau");
+                etatLabel.setText("<html><a color=green>Connecte</a></html>");
+                connectionBouton.setText("Deconnecter l'abri du reseau");
                 ajusterEtatBoutons();
             } catch (Exception ex) {
                 ex.printStackTrace();
-                afficherErreur("Erreur de déconnexion", ex.getMessage());
+                afficherErreur("Erreur de deconnexion", ex.getMessage());
             }
         }
     }//GEN-LAST:event_connectionBoutonActionPerformed
@@ -438,10 +438,10 @@ public class AbriVue extends JFrame implements Observer {
     }
 
     /**
-     * Affiche une boîte de dialogue correspondant à une erreur
+     * Affiche une boete de dialogue correspondant e une erreur
      *
-     * @param titre Titre de la boîte de dialogue
-     * @param contenu Détail du message d'erreur
+     * @param titre Titre de la boete de dialogue
+     * @param contenu Detail du message d'erreur
      */
     public void afficherErreur(String titre, String contenu) {
         new ErrorDialog(this, titre, contenu);

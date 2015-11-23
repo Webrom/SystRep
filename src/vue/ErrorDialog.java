@@ -23,9 +23,9 @@ class ErrorDialog {
     /**
      * Constructeur
      *
-     * @param _parentComponent Composant parent de la boîte de dialogue
+     * @param _parentComponent Composant parent de la boete de dialogue
      * @param _title Titre
-     * @param _content Détail du message d'erreur
+     * @param _content Detail du message d'erreur
      */
     protected ErrorDialog(final Component _parentComponent, final String _title, final String _content) {
         Thread t = new Thread(new Runnable() {

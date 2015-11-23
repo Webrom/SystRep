@@ -6,15 +6,16 @@
 package vue;
 
 import controle.NoeudCentralBackend;
-import java.awt.Color;
+import modele.Annuaire;
+import modele.NoeudCentral;
+import modele.NoeudCentralException;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JList;
-import modele.Annuaire;
-import modele.NoeudCentral;
-import modele.NoeudCentralException;
 
 /**
  *
@@ -202,10 +203,10 @@ public class NoeudCentralVue extends javax.swing.JFrame implements Observer {
     }
     
     /**
-     * Affiche une boîte de dialogue correspondant à une erreur
+     * Affiche une boete de dialogue correspondant e une erreur
      *
-     * @param titre Titre de la boîte de dialogue
-     * @param contenu Détail du message d'erreur
+     * @param titre Titre de la boete de dialogue
+     * @param contenu Detail du message d'erreur
      */
     public void afficherErreur(String titre, String contenu) {
         new ErrorDialog(this, titre, contenu);
