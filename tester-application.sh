@@ -11,7 +11,7 @@
 # Novembre 2015
 #
 
-CLASS_PATH=./build/classes
+CLASS_PATH=./build/production/SystRep/
 
 cd $CLASS_PATH
 rmiregistry 2020 &
