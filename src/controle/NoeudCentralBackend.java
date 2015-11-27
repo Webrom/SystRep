@@ -29,10 +29,10 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
 
     public NoeudCentralBackend(String _url) throws RemoteException, MalformedURLException {
         this.url = _url;
-        noeudCentral = new NoeudCentral(this);
+        noeudCentral = new NoeudCentral();
         abris = new Annuaire();
         Naming.rebind(url, (NoeudCentralRemoteInterface) this);
-        this.lamport =  new Lamport();
+        this.lamport =  new Lamport(this);
     }
 
     @Override
