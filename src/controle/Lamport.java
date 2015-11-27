@@ -35,17 +35,17 @@ public class Lamport implements LamportInterface {
     public void demandeSectionCritique(int numeroAbri) {
         changeAbriInfo(InfosMsgAbri.REQ,numeroAbri);
         if(!abrisSC){
-            //todo envoyer sc à l'abris wesh
+            noeudCentralBackend.obtientSC(numeroAbri);
             this.abrisSC = true;
         }
     }
 
     @Override
-    public void finSectionCritique(int numeroAbris) {
-        changeAbriInfo(InfosMsgAbri.REL,numeroAbris);
-        AbrisLamport abri = getMinReq(numeroAbris);
+    public void finSectionCritique(int numeroAbri) {
+        changeAbriInfo(InfosMsgAbri.REL,numeroAbri);
+        AbrisLamport abri = getMinReq(numeroAbri);
         if (abri != null){
-            //todo envoyer SC a abris
+            noeudCentralBackend.obtientSC(numeroAbri);
             this.abrisSC = true;
         }else{
             this.abrisSC=false;

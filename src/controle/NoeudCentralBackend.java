@@ -101,4 +101,12 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
         abris.retirerAbriDistant(urlAbriDistant);
     }
 
+    /**
+     * Permet de prévenir un abri qu'il obtient la SC
+     * @param numeroAbri numéro de l'abri à informer
+     */
+    public void obtientSC(int numeroAbri){
+        //TODO trouver le moyen d'envoyer ce truc à l'abri
+    }
+
 }
