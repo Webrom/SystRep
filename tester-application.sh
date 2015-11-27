@@ -13,7 +13,7 @@
 
 CLASS_PATH=./build/classes
 
-cd $CLASS_PATH
+cd ${CLASS_PATH}
 rmiregistry 2020 &
 cd - > /dev/null
 sleep 0.2
