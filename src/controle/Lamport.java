@@ -5,7 +5,6 @@ import modele.InfosMsgAbris;
 
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * Created by azank on 27/11/2015.
  */
@@ -22,11 +21,20 @@ public class Lamport implements LamportInterface {
         this.listeGestionAbris = new ArrayList<>();
     }
 
+    /**
+     * Constructeur utilisé pour les tests
+     */
+    public Lamport() {
+        this.clock=0;
+        this.abrisSC=false;
+        this.listeGestionAbris = new ArrayList<>();
+    }
+
     @Override
     public void demandeSectionCritique(int numeroAbris) {
         changeAbrisInfo(InfosMsgAbris.REQ,numeroAbris);
         if(!abrisSC){
-            //envoyer sc à l'abris wesh
+            //todo envoyer sc à l'abris wesh
             this.abrisSC = true;
         }
     }
@@ -36,7 +44,7 @@ public class Lamport implements LamportInterface {
         changeAbrisInfo(InfosMsgAbris.REL,numeroAbris);
         AbrisLamport abris = getMinReq(numeroAbris);
         if (abris != null){
-            //envoyer SC a abris
+            //todo envoyer SC a abris
             this.abrisSC = true;
         }else{
             this.abrisSC=false;
@@ -103,4 +111,10 @@ public class Lamport implements LamportInterface {
         return a;
     }
 
+    @Override
+    public String toString() {
+        return "Lamport{" +
+                "listeGestionAbris=" + listeGestionAbris +
+                '}';
+    }
 }
