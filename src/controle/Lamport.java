@@ -50,7 +50,7 @@ public class Lamport implements LamportInterface {
     @Override
     public void finSectionCritique(int numeroAbri) {
         changeAbriInfo(InfosMsgAbri.REL,numeroAbri);
-        AbrisLamport abri = getMinReq(numeroAbri);
+        AbrisLamport abri = getMinReq();
         if (abri != null){
             try {
                 noeudCentralBackend.obtientSC(abri.getNumeroAbris());
@@ -65,8 +65,8 @@ public class Lamport implements LamportInterface {
 
     /**
      * Modifie l'info de l'abris
-     * @param msg
-     * @param numeroAbri
+     * @param msg : changement info de l'abri
+     * @param numeroAbri : numero de l'abri
      */
     private void changeAbriInfo(InfosMsgAbri msg, int numeroAbri){
         findAbris(numeroAbri).setInfo(msg);
@@ -77,8 +77,8 @@ public class Lamport implements LamportInterface {
     /**
      * Permet de savoir si l'abris est dans notre liste de gestion, si oui alors on renvoit sa reference sinon on ajoute
      * l'abris à la liste
-     * @param numeroAbri
-     * @return
+     * @param numeroAbri : numero de l'abris
+     * @return AbrisLamport
      */
     private AbrisLamport findAbris(int numeroAbri){
         AbrisLamport abri = null;
@@ -104,8 +104,8 @@ public class Lamport implements LamportInterface {
 
     /**
      * Ajoute un abris à la liste de gestion
-     * @param numeroAbri
-     * @return
+     * @param numeroAbri : numero de l'abris
+     * @return AbrisLamport
      */
     private AbrisLamport addAbrisintoList(int numeroAbri){
         AbrisLamport newAbri = new AbrisLamport(numeroAbri,InfosMsgAbri.REQ,clock);
@@ -116,10 +116,9 @@ public class Lamport implements LamportInterface {
 
     /**
      * Renvoie l'abris qui a demandé la section critique le plus tot
-     * @param numeroAbri
-     * @return
+     * @return AbrisLamport
      */
-    private AbrisLamport getMinReq(int numeroAbri){
+    private AbrisLamport getMinReq(){
         AbrisLamport a = null;
         int min = clock;
         for(AbrisLamport abri : this.listeGestionAbris){
