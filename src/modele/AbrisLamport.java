@@ -15,7 +15,7 @@ public class AbrisLamport {
     }
 
     public int getNumeroAbris() {
-        return numeroAbris; 
+        return numeroAbris;
     }
 
     public void setNumeroAbris(int numeroAbris) {
