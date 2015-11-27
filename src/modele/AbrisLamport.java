@@ -37,4 +37,13 @@ public class AbrisLamport {
     public void setHorloge(int horloge) {
         this.horloge = horloge;
     }
+
+    @Override
+    public String toString() {
+        return "AbrisLamport{" +
+                "numeroAbris=" + numeroAbris +
+                ", info=" + info +
+                ", horloge=" + horloge +
+                '}';
+    }
 }

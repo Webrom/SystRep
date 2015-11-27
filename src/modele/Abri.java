@@ -63,5 +63,5 @@ public class Abri extends Observable {
         super.setChanged();
         notifyObservers();
     }
-    
+
 }
