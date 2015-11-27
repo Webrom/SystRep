@@ -33,29 +33,29 @@ public class Lamport implements LamportInterface {
     }
 
     @Override
-    public void demandeSectionCritique(int numeroAbri) {
-        if(findAbris(numeroAbri).getInfo()!=InfosMsgAbri.REQ){
-            changeAbriInfo(InfosMsgAbri.REQ,numeroAbri);
+    public void demandeSectionCritique(String urlAbri) {
+        if(findAbris(urlAbri).getInfo()!=InfosMsgAbri.REQ){
+            changeAbriInfo(InfosMsgAbri.REQ,urlAbri);
         }
         if(!abrisSC){
             try {
-                noeudCentralBackend.obtientSC(numeroAbri);
+                noeudCentralBackend.obtientSC(urlAbri);
             }catch (NullPointerException error){
-                System.out.println(numeroAbri + "est en section critique");
+                System.out.println(urlAbri + "est en section critique");
             }
             this.abrisSC = true;
         }
     }
 
     @Override
-    public void finSectionCritique(int numeroAbri) {
-        changeAbriInfo(InfosMsgAbri.REL,numeroAbri);
+    public void finSectionCritique(String urlAbri) {
+        changeAbriInfo(InfosMsgAbri.REL,urlAbri);
         AbrisLamport abri = getMinReq();
         if (abri != null){
             try {
-                noeudCentralBackend.obtientSC(abri.getNumeroAbris());
+                noeudCentralBackend.obtientSC(abri.getUrlAbri());
             }catch (NullPointerException error){
-                System.out.println(abri.getNumeroAbris() + "est en section critique");
+                System.out.println(abri.getUrlAbri() + "est en section critique");
             }
             this.abrisSC = true;
         }else{
@@ -66,37 +66,37 @@ public class Lamport implements LamportInterface {
     /**
      * Modifie l'info de l'abris
      * @param msg : changement info de l'abri
-     * @param numeroAbri : numero de l'abri
+     * @param urlAbri : numero de l'abri
      */
-    private void changeAbriInfo(InfosMsgAbri msg, int numeroAbri){
-        findAbris(numeroAbri).setInfo(msg);
-        findAbris(numeroAbri).setClock(clock);
+    private void changeAbriInfo(InfosMsgAbri msg, String urlAbri){
+        findAbris(urlAbri).setInfo(msg);
+        findAbris(urlAbri).setClock(clock);
         clock++;
     }
 
     /**
      * Permet de savoir si l'abris est dans notre liste de gestion, si oui alors on renvoit sa reference sinon on ajoute
      * l'abris à la liste
-     * @param numeroAbri : numero de l'abris
+     * @param urlAbris : numero de l'abris
      * @return AbrisLamport
      */
-    private AbrisLamport findAbris(int numeroAbri){
+    private AbrisLamport findAbris(String urlAbris){
         AbrisLamport abri = null;
         if(listeGestionAbris.isEmpty()) {
-            abri = addAbrisintoList(numeroAbri);
+            abri = addAbrisintoList(urlAbris);
         }else {
             Iterator<AbrisLamport> i = this.listeGestionAbris.iterator();
             boolean find = false;
             while (i.hasNext() && !find){
                 AbrisLamport tamponAbri = i.next();
-                if(tamponAbri.getNumeroAbris()==numeroAbri){
+                if(tamponAbri.getUrlAbri()==urlAbris){
                     abri = tamponAbri;
                     find = true;
                 }
             }
             if(abri==null){
                 //L'abris n'est pas présent dans la liste
-                abri = addAbrisintoList(numeroAbri);
+                abri = addAbrisintoList(urlAbris);
             }
         }
         return abri;
@@ -104,11 +104,11 @@ public class Lamport implements LamportInterface {
 
     /**
      * Ajoute un abris à la liste de gestion
-     * @param numeroAbri : numero de l'abris
+     * @param urlAbri : numero de l'abris
      * @return AbrisLamport
      */
-    private AbrisLamport addAbrisintoList(int numeroAbri){
-        AbrisLamport newAbri = new AbrisLamport(numeroAbri,InfosMsgAbri.REQ,clock);
+    private AbrisLamport addAbrisintoList(String urlAbri){
+        AbrisLamport newAbri = new AbrisLamport(urlAbri,InfosMsgAbri.REQ,clock);
         clock++;
         this.listeGestionAbris.add(newAbri);
         return newAbri;
@@ -123,7 +123,7 @@ public class Lamport implements LamportInterface {
         int min = clock;
         for(AbrisLamport abri : this.listeGestionAbris){
             min = (abri.getClock()<=min)?abri.getClock():min;
-            a = (abri.getInfo()== InfosMsgAbri.REQ && abri.getClock()<=min)?findAbris(abri.getNumeroAbris()):null;
+            a = (abri.getInfo()== InfosMsgAbri.REQ && abri.getClock()<=min)?findAbris(abri.getUrlAbri()):null;
         }
         return a;
     }

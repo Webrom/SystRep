@@ -7,10 +7,10 @@ public class TestLamport {
     public static void main(String[] args) {
         System.out.println("test lamport");
         Lamport lamport = new Lamport();
-        lamport.demandeSectionCritique(42);
-        lamport.demandeSectionCritique(31);
-        lamport.demandeSectionCritique(42);
-        lamport.finSectionCritique(42);
+        lamport.demandeSectionCritique("45");
+        lamport.demandeSectionCritique("31");
+        lamport.demandeSectionCritique("45");
+        lamport.finSectionCritique("45");
         lamport.affiche();
     }
 }

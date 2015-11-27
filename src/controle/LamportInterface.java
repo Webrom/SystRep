@@ -6,13 +6,13 @@ package controle;
 public interface LamportInterface {
     /**
      * Receptionne du demande d'entree en section critique du noeud central de la part d'un processus metier
-     * @param numeroAbris
+     * @param urlAbri
      */
-    void demandeSectionCritique(int numeroAbris);
+    void demandeSectionCritique(String urlAbri);
 
     /**
      * Receptionne la notification du noeud central a sa sortie de la section critique d'un processus metier
-     * @param numeroAbris
+     * @param urlAbri
      */
-    void finSectionCritique(int numeroAbris);
+    void finSectionCritique(String urlAbri);
 }
