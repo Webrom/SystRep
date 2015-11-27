@@ -6,11 +6,12 @@ package modele;
 public class AbrisLamport {
     private int numeroAbris;
     private InfosMsgAbri info;
-    private int horloge;
+    private int clock;
 
-    public AbrisLamport(int numeroAbris, InfosMsgAbri info) {
+    public AbrisLamport(int numeroAbris, InfosMsgAbri info, int clock) {
         this.numeroAbris = numeroAbris;
         this.info = info;
+        this.clock = clock;
     }
 
     public int getNumeroAbris() {
@@ -25,18 +26,18 @@ public class AbrisLamport {
         this.info = info;
     }
 
-    public int getHorloge() {
-        return horloge;
+    public int getClock() {
+        return clock;
     }
 
-    public void setHorloge(int horloge) {this.horloge = horloge;}
+    public void setClock(int clock) {this.clock = clock;}
 
     @Override
     public String toString() {
         return "AbrisLamport{" +
                 "numeroAbris=" + numeroAbris +
                 ", info=" + info +
-                ", horloge=" + Integer.toString(horloge) +
+                ", clock=" + Integer.toString(clock) +
                 '}';
     }
 }

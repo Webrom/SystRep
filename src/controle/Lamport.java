@@ -4,6 +4,7 @@ import modele.AbrisLamport;
 import modele.InfosMsgAbri;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 /**
  * Created by azank on 27/11/2015.
@@ -33,7 +34,9 @@ public class Lamport implements LamportInterface {
 
     @Override
     public void demandeSectionCritique(int numeroAbri) {
-        changeAbriInfo(InfosMsgAbri.REQ,numeroAbri);
+        if(findAbris(numeroAbri).getInfo()!=InfosMsgAbri.REQ){
+            changeAbriInfo(InfosMsgAbri.REQ,numeroAbri);
+        }
         if(!abrisSC){
             noeudCentralBackend.obtientSC(numeroAbri);
             this.abrisSC = true;
@@ -59,7 +62,7 @@ public class Lamport implements LamportInterface {
      */
     private void changeAbriInfo(InfosMsgAbri msg, int numeroAbri){
         findAbris(numeroAbri).setInfo(msg);
-        findAbris(numeroAbri).setHorloge(clock);
+        findAbris(numeroAbri).setClock(clock);
         clock++;
     }
 
@@ -74,8 +77,14 @@ public class Lamport implements LamportInterface {
         if(listeGestionAbris.isEmpty()) {
             abri = addAbrisintoList(numeroAbri);
         }else {
-            for (AbrisLamport liste_abris : this.listeGestionAbris) {
-                abri = (liste_abris.getNumeroAbris()==numeroAbri)?liste_abris:null;
+            Iterator<AbrisLamport> i = this.listeGestionAbris.iterator();
+            boolean find = false;
+            while (i.hasNext() && !find){
+                AbrisLamport tamponAbri = i.next();
+                if(tamponAbri.getNumeroAbris()==numeroAbri){
+                    abri = tamponAbri;
+                    find = true;
+                }
             }
             if(abri==null){
                 //L'abris n'est pas présent dans la liste
@@ -91,7 +100,8 @@ public class Lamport implements LamportInterface {
      * @return
      */
     private AbrisLamport addAbrisintoList(int numeroAbri){
-        AbrisLamport newAbri = new AbrisLamport(numeroAbri,InfosMsgAbri.REQ);
+        AbrisLamport newAbri = new AbrisLamport(numeroAbri,InfosMsgAbri.REQ,clock);
+        clock++;
         this.listeGestionAbris.add(newAbri);
         return newAbri;
     }
@@ -105,13 +115,14 @@ public class Lamport implements LamportInterface {
         AbrisLamport a = null;
         int min = clock;
         for(AbrisLamport abri : this.listeGestionAbris){
-            min = (abri.getHorloge()<=min)?abri.getHorloge():min;
-            a = (abri.getInfo()== InfosMsgAbri.REQ && abri.getHorloge()<=min)?findAbris(abri.getNumeroAbris()):null;
+            min = (abri.getClock()<=min)?abri.getClock():min;
+            a = (abri.getInfo()== InfosMsgAbri.REQ && abri.getClock()<=min)?findAbris(abri.getNumeroAbris()):null;
         }
         return a;
     }
 
     public void affiche(){
+        System.out.println("liste gestion :");
         for(AbrisLamport abri : this.listeGestionAbris){
             System.out.println(abri.toString());
         }
