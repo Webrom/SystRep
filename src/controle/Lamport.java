@@ -91,10 +91,8 @@ public class Lamport implements LamportInterface {
      * @return
      */
     private AbrisLamport addAbrisintoList(int numeroAbri){
-        AbrisLamport newAbri = new AbrisLamport(numeroAbri,"req",clock);
+        AbrisLamport newAbri = new AbrisLamport(numeroAbri,InfosMsgAbri.REQ);
         this.listeGestionAbris.add(newAbri);
-        System.out.println("ajout abris :"+numeroAbri);
-        clock++;
         return newAbri;
     }
 
@@ -114,7 +112,6 @@ public class Lamport implements LamportInterface {
     }
 
     public void affiche(){
-        System.out.println(this.listeGestionAbris.size());
         for(AbrisLamport abri : this.listeGestionAbris){
             System.out.println(abri.toString());
         }

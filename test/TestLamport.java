@@ -8,6 +8,7 @@ public class TestLamport {
         System.out.println("test lamport");
         Lamport lamport = new Lamport();
         lamport.demandeSectionCritique(42);
+        lamport.demandeSectionCritique(31);
         lamport.affiche();
     }
 }

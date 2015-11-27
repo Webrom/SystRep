@@ -8,18 +8,13 @@ public class AbrisLamport {
     private InfosMsgAbri info;
     private int horloge;
 
-    public AbrisLamport(int numeroAbris, String message, int horloge) {
+    public AbrisLamport(int numeroAbris, InfosMsgAbri info) {
         this.numeroAbris = numeroAbris;
         this.info = info;
-        this.horloge = horloge;
     }
 
     public int getNumeroAbris() {
         return numeroAbris;
-    }
-
-    public void setNumeroAbris(int numeroAbris) {
-        this.numeroAbris = numeroAbris;
     }
 
     public InfosMsgAbri getInfo() {
@@ -34,16 +29,14 @@ public class AbrisLamport {
         return horloge;
     }
 
-    public void setHorloge(int horloge) {
-        this.horloge = horloge;
-    }
+    public void setHorloge(int horloge) {this.horloge = horloge;}
 
     @Override
     public String toString() {
         return "AbrisLamport{" +
                 "numeroAbris=" + numeroAbris +
                 ", info=" + info +
-                ", horloge=" + horloge +
+                ", horloge=" + Integer.toString(horloge) +
                 '}';
     }
 }
