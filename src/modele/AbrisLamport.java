@@ -1,11 +1,11 @@
-package controle;
+package modele;
 
 /**
  * Created by azank on 27/11/2015.
  */
 public class AbrisLamport {
     private int numeroAbris;
-    private String info;
+    private InfosMsgAbris info;
     private int horloge;
 
     public AbrisLamport(int numeroAbris, String message, int horloge) {
@@ -22,11 +22,11 @@ public class AbrisLamport {
         this.numeroAbris = numeroAbris;
     }
 
-    public String getinfo() {
+    public InfosMsgAbris getInfo() {
         return info;
     }
 
-    public void setinfo(String info) {
+    public void setInfo(InfosMsgAbris info) {
         this.info = info;
     }
 
