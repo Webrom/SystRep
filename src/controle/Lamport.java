@@ -1,7 +1,7 @@
 package controle;
 
 import modele.AbrisLamport;
-import modele.InfosMsgAbris;
+import modele.InfosMsgAbri;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,8 @@ public class Lamport implements LamportInterface {
     }
 
     @Override
-    public void demandeSectionCritique(int numeroAbris) {
-        changeAbrisInfo(InfosMsgAbris.REQ,numeroAbris);
+    public void demandeSectionCritique(int numeroAbri) {
+        changeAbriInfo(InfosMsgAbri.REQ,numeroAbri);
         if(!abrisSC){
             //todo envoyer sc à l'abris wesh
             this.abrisSC = true;
@@ -41,9 +41,9 @@ public class Lamport implements LamportInterface {
 
     @Override
     public void finSectionCritique(int numeroAbris) {
-        changeAbrisInfo(InfosMsgAbris.REL,numeroAbris);
-        AbrisLamport abris = getMinReq(numeroAbris);
-        if (abris != null){
+        changeAbriInfo(InfosMsgAbri.REL,numeroAbris);
+        AbrisLamport abri = getMinReq(numeroAbris);
+        if (abri != null){
             //todo envoyer SC a abris
             this.abrisSC = true;
         }else{
@@ -54,67 +54,68 @@ public class Lamport implements LamportInterface {
     /**
      * Modifie l'info de l'abris
      * @param msg
-     * @param numeroAbris
+     * @param numeroAbri
      */
-    private void changeAbrisInfo(InfosMsgAbris msg,int numeroAbris){
-        findAbris(numeroAbris).setInfo(msg);
-        findAbris(numeroAbris).setHorloge(clock);
+    private void changeAbriInfo(InfosMsgAbri msg, int numeroAbri){
+        findAbris(numeroAbri).setInfo(msg);
+        findAbris(numeroAbri).setHorloge(clock);
         clock++;
     }
 
     /**
      * Permet de savoir si l'abris est dans notre liste de gestion, si oui alors on renvoit sa reference sinon on ajoute
      * l'abris à la liste
-     * @param numeroAbris
+     * @param numeroAbri
      * @return
      */
-    private AbrisLamport findAbris(int numeroAbris){
-        AbrisLamport abris = null;
+    private AbrisLamport findAbris(int numeroAbri){
+        AbrisLamport abri = null;
         if(listeGestionAbris.isEmpty()) {
-            abris = addAbrisintoList(numeroAbris);
+            abri = addAbrisintoList(numeroAbri);
         }else {
             for (AbrisLamport liste_abris : this.listeGestionAbris) {
-                abris = (liste_abris.getNumeroAbris()==numeroAbris)?liste_abris:null;
+                abri = (liste_abris.getNumeroAbris()==numeroAbri)?liste_abris:null;
             }
-            if(abris==null){
+            if(abri==null){
                 //L'abris n'est pas présent dans la liste
-                abris = addAbrisintoList(numeroAbris);
+                abri = addAbrisintoList(numeroAbri);
             }
         }
-        return abris;
+        return abri;
     }
 
     /**
      * Ajoute un abris à la liste de gestion
-     * @param numeroAbris
+     * @param numeroAbri
      * @return
      */
-    private AbrisLamport addAbrisintoList(int numeroAbris){
-        AbrisLamport newAbris = new AbrisLamport(numeroAbris,"req",clock);
+    private AbrisLamport addAbrisintoList(int numeroAbri){
+        AbrisLamport newAbri = new AbrisLamport(numeroAbri,"req",clock);
+        this.listeGestionAbris.add(newAbri);
+        System.out.println("ajout abris :"+numeroAbri);
         clock++;
-        System.out.println(clock);
-        return newAbris;
+        return newAbri;
     }
 
     /**
      * Renvoie l'abris qui a demandé la section critique le plus tot
-     * @param numeroAbris
+     * @param numeroAbri
      * @return
      */
-    private AbrisLamport getMinReq(int numeroAbris){
+    private AbrisLamport getMinReq(int numeroAbri){
         AbrisLamport a = null;
         int min = clock;
-        for(AbrisLamport abris : this.listeGestionAbris){
-            min = (abris.getHorloge()<=min)?abris.getHorloge():min;
-            a = (abris.getInfo()==InfosMsgAbris.REQ && abris.getHorloge()<=min)?findAbris(abris.getNumeroAbris()):null;
+        for(AbrisLamport abri : this.listeGestionAbris){
+            min = (abri.getHorloge()<=min)?abri.getHorloge():min;
+            a = (abri.getInfo()== InfosMsgAbri.REQ && abri.getHorloge()<=min)?findAbris(abri.getNumeroAbris()):null;
         }
         return a;
     }
 
-    @Override
-    public String toString() {
-        return "Lamport{" +
-                "listeGestionAbris=" + listeGestionAbris +
-                '}';
+    public void affiche(){
+        System.out.println(this.listeGestionAbris.size());
+        for(AbrisLamport abri : this.listeGestionAbris){
+            System.out.println(abri.toString());
+        }
     }
 }
