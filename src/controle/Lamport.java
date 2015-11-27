@@ -9,7 +9,7 @@ import java.util.List;
  * Created by azank on 27/11/2015.
  */
 public class Lamport implements LamportInterface {
-    private NoeudCentralRemoteInterface noeudCentralBackend;
+    private NoeudCentralBackend noeudCentralBackend;
     private int clock;
     private List<AbrisLamport> listeGestionAbris;
     private boolean abrisSC;
@@ -19,6 +19,7 @@ public class Lamport implements LamportInterface {
         this.clock=0;
         this.abrisSC=false;
         this.listeGestionAbris = new ArrayList<>();
+        this.noeudCentralBackend = noeudCentralBackend;
     }
 
     /**
