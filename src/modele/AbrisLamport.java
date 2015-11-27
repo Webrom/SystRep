@@ -5,7 +5,7 @@ package modele;
  */
 public class AbrisLamport {
     private int numeroAbris;
-    private InfosMsgAbris info;
+    private InfosMsgAbri info;
     private int horloge;
 
     public AbrisLamport(int numeroAbris, String message, int horloge) {
@@ -22,11 +22,11 @@ public class AbrisLamport {
         this.numeroAbris = numeroAbris;
     }
 
-    public InfosMsgAbris getInfo() {
+    public InfosMsgAbri getInfo() {
         return info;
     }
 
-    public void setInfo(InfosMsgAbris info) {
+    public void setInfo(InfosMsgAbri info) {
         this.info = info;
     }
 
