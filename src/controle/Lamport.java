@@ -38,7 +38,11 @@ public class Lamport implements LamportInterface {
             changeAbriInfo(InfosMsgAbri.REQ,numeroAbri);
         }
         if(!abrisSC){
-            noeudCentralBackend.obtientSC(numeroAbri);
+            try {
+                noeudCentralBackend.obtientSC(numeroAbri);
+            }catch (NullPointerException error){
+                System.out.println(numeroAbri + "est en section critique");
+            }
             this.abrisSC = true;
         }
     }
@@ -48,7 +52,11 @@ public class Lamport implements LamportInterface {
         changeAbriInfo(InfosMsgAbri.REL,numeroAbri);
         AbrisLamport abri = getMinReq(numeroAbri);
         if (abri != null){
-            noeudCentralBackend.obtientSC(numeroAbri);
+            try {
+                noeudCentralBackend.obtientSC(abri.getNumeroAbris());
+            }catch (NullPointerException error){
+                System.out.println(abri.getNumeroAbris() + "est en section critique");
+            }
             this.abrisSC = true;
         }else{
             this.abrisSC=false;
