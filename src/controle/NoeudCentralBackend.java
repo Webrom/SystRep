@@ -5,6 +5,8 @@
  */
 package controle;
 
+import modele.*;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -12,11 +14,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
-import modele.Annuaire;
-import modele.AbriException;
-import modele.Message;
-import modele.NoeudCentral;
-import modele.NoeudCentralException;
 
 /**
  *
@@ -28,12 +25,14 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
     protected String url;
     protected NoeudCentral noeudCentral;
     protected Annuaire abris;
+    protected Lamport lamport;
 
     public NoeudCentralBackend(String _url) throws RemoteException, MalformedURLException {
         this.url = _url;
-        noeudCentral = new NoeudCentral();
+        noeudCentral = new NoeudCentral(this);
         abris = new Annuaire();
         Naming.rebind(url, (NoeudCentralRemoteInterface) this);
+        this.lamport =  new Lamport();
     }
 
     @Override
