@@ -17,7 +17,7 @@ import java.rmi.RemoteException;
  */
 public interface AbriRemoteInterface extends Remote {
 
-    public void enregistrerAbri(String urlAbriDistant, String groupe, String urlControleurDistant) throws RemoteException;
+    public void enregistrerAbri(String urlAbriDistant, String groupe) throws RemoteException, AbriException, InterruptedException;
     
     public void supprimerAbri(String urlAbriDistant, String urlControleurDistant) throws RemoteException;
 
@@ -30,4 +30,6 @@ public interface AbriRemoteInterface extends Remote {
     public String signalerGroupe() throws RemoteException;
 
     public void recevoirSC() throws RemoteException;
+
+    public void updateCopains(String urlEmetteur) throws RemoteException, AbriException;
 }

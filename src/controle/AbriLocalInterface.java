@@ -26,13 +26,13 @@ public interface AbriLocalInterface {
     
     public Annuaire getAnnuaire();
     
-    public void connecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException;
+    public void connecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException, InterruptedException;
     
     public void deconnecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException;
     
     public void emettreMessage(String message) throws InterruptedException, RemoteException, AbriException, NoeudCentralException;
     
-    public void enregistrerAbri(String url, String groupe, AbriRemoteInterface distant);
+    public void enregistrerAbri(String url, String groupe) throws AbriException, RemoteException, InterruptedException;
     
     public void supprimerAbri(String url);
 

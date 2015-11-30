@@ -33,5 +33,9 @@ public interface NoeudCentralRemoteInterface extends Remote {
     public void askSC(String url) throws AbriException, RemoteException;
 
     public void rendSC(String url) throws AbriException, RemoteException;
+
+    public void connectNewAbri(String url, String groupe) throws RemoteException, AbriException, InterruptedException;
+
+    public void replyNewAbri(String urlEmetteur, String urlDistinataire) throws RemoteException, AbriException;
     
 }

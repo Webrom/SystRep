@@ -87,7 +87,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     }
 
     @Override
-    public void connecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException {
+    public void connecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException, InterruptedException {
         // Enregistrer dans l'annuaire RMI
         //TODO modifier la connection d'abri
         Naming.rebind(url, (AbriRemoteInterface) this);
@@ -98,18 +98,21 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
             name = "rmi:" + name;
             if (!name.equals(url)) {
                 Remote o = Naming.lookup(name);
-                if (o instanceof AbriRemoteInterface) {
-                    // Enregistrement de l'abri courant
-                    System.out.println(url + ": \tEnregistrement aupres de " + name);
-                    ((AbriRemoteInterface) o).enregistrerAbri(url, abri.donnerGroupe(), controleurUrl);
-                    // Enregistrement d'un abri distant
-                    AbriBackend.this.enregistrerAbri(name, ((AbriRemoteInterface) o).signalerGroupe(), (AbriRemoteInterface) o);
-                }
-                else if (o instanceof NoeudCentralRemoteInterface) {
+                if (o instanceof NoeudCentralRemoteInterface) {
+                    // Enregistrement du noeud central
                     if (noeudCentral == null) {
                         this.noeudCentralUrl = name;
                         noeudCentral = (NoeudCentralRemoteInterface) o;
                         noeudCentral.enregisterAbri(url);
+                        noeudCentral.askSC(url);
+                        System.out.println("avant sem");
+                        semaphore.acquire();
+                        System.out.println("apres sem");
+                        noeudCentral.connectNewAbri(this.url,this.abri.donnerGroupe());
+                        System.out.println("apres connectNewAbri");
+                        noeudCentral.rendSC(url);
+                        System.out.println("après rendSC");
+                        abri.connecter();
                     }
                     else {
                         throw new AbriException("Plusieurs noeuds centraux semblent exister.");
@@ -117,7 +120,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
                 }
             }
         }
-        abri.connecter();
+
     }
 
     /**
@@ -181,31 +184,23 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     }
 
     @Override
-    public void enregistrerAbri(String urlDistant, String groupe, AbriRemoteInterface distant) {
-        abrisDistants.ajouterAbriDistant(urlDistant, distant);
+    public void enregistrerAbri(String urlDistant, String groupe) throws AbriException, RemoteException, InterruptedException {
         
         if (groupe.equals(abri.donnerGroupe()))
         {
             this.copains.add(urlDistant);
+            noeudCentral.askSC(this.url);
+            semaphore.acquire();
+            noeudCentral.replyNewAbri(this.url,urlDistant);
+            noeudCentral.rendSC(this.url);
         }
         
         System.out.println(url + ": \tEnregistrement de l'abri " + urlDistant);
     }
 
     @Override
-    public synchronized void enregistrerAbri(String urlAbriDistant, String groupe, String urlControleurDistant) {
-        try {
-            AbriRemoteInterface o = (AbriRemoteInterface) Naming.lookup(urlAbriDistant);
-            AbriBackend.this.enregistrerAbri(urlAbriDistant, groupe, o);
-            enregistrerControleur(urlControleurDistant, groupe);
-            o.enregistrerControleur(controleurUrl, groupe);
-        } catch (NotBoundException ex) {
-            Logger.getLogger(AbriBackend.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(AbriBackend.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(AbriBackend.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void updateCopains(String urlEmetteur) throws RemoteException, AbriException {
+        this.copains.add(urlEmetteur);
     }
 
     @Override

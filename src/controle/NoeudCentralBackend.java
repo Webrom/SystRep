@@ -14,6 +14,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -122,6 +124,23 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
     @Override
     public void rendSC(String url) throws AbriException, RemoteException{
         lamport.finSectionCritique(url);
+        System.out.println("dans rendSC");
     }
 
+    @Override
+    public void connectNewAbri(String url, String groupe) throws RemoteException, AbriException, InterruptedException {
+        System.out.println("entre dans connectNewAbri");
+        for (Map.Entry<String, AbriRemoteInterface> entry:abris.getAbrisDistants().entrySet()) {
+            System.out.println("entre dans le for");
+            if(!Objects.equals(entry.getKey(), url)) {
+                entry.getValue().enregistrerAbri(url, groupe);
+                System.out.println("entre dans le if du foreach");
+            }
+        }
+    }
+
+    @Override
+    public void replyNewAbri(String urlEmetteur, String urlDistinataire) throws RemoteException, AbriException {
+        abris.chercherUrl(urlDistinataire).updateCopains(urlEmetteur);
+    }
 }

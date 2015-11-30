@@ -18,7 +18,6 @@ public class Lamport {
     private int clock;
     private List<AbrisLamport> listeGestionAbris;
     private boolean sc;
-    //ajout pour eviter d'envoyer la sc si le process fin_sc est different de celui qui est en sc
     private String abrisSC;
 
     public Lamport(NoeudCentralBackend noeudCentralBackend) {
@@ -57,23 +56,22 @@ public class Lamport {
 
 
     public void finSectionCritique(String urlAbri) throws AbriException, RemoteException {
+        System.out.println("debut finsectionCritique Lamport");
         changeAbriInfo(InfosMsgAbri.REL,urlAbri);
         sc = false;
         if(Objects.equals(urlAbri, this.abrisSC) && !sc){
             try {
                 AbrisLamport abri = getMinReq();
                 //utilisé pour les tests
-                try {
-                    noeudCentralBackend.obtientSC(abri.getUrlAbri());
-                }catch (NullPointerException error){
-                    System.out.println(abri.getUrlAbri() + "est en section critique");
-                }
+                noeudCentralBackend.obtientSC(abri.getUrlAbri());
                 this.sc = true;
                 this.abrisSC = abri.getUrlAbri();
             }catch(NullPointerException e){
-                System.out.println(e.toString());
+                System.out.println("test "+e.toString());
             }
         }
+        System.out.println("fin de la fonction finsectionCritique Lamport");
+
     }
 
     /**
