@@ -63,9 +63,11 @@ public class Lamport {
             try {
                 AbrisLamport abri = getMinReq();
                 //utilisé pour les tests
-                noeudCentralBackend.obtientSC(abri.getUrlAbri());
-                this.sc = true;
-                this.abrisSC = abri.getUrlAbri();
+                if(abri!=null){
+                    noeudCentralBackend.obtientSC(abri.getUrlAbri());
+                    this.sc = true;
+                    this.abrisSC = abri.getUrlAbri();
+                }
             }catch(NullPointerException e){
                 System.out.println("test "+e.toString());
             }
