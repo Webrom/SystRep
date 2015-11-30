@@ -5,9 +5,10 @@
  */
 package controle;
 
+import modele.AbriException;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import modele.AbriException;
 
 /**
  *
@@ -27,4 +28,6 @@ public interface AbriRemoteInterface extends Remote {
     public void recevoirMessage(modele.Message transmission) throws RemoteException, AbriException;
 
     public String signalerGroupe() throws RemoteException;
+
+    public void recevoirAutorisation();
 }

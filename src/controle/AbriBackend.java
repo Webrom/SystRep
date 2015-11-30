@@ -5,7 +5,8 @@
  */
 package controle;
 
-import modele.AbriException;
+import modele.*;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -16,11 +17,6 @@ import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modele.Annuaire;
-import modele.Abri;
-import modele.Message;
-import modele.Adresses;
-import modele.NoeudCentralException;
 
 /**
  *
@@ -171,7 +167,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
 
     @Override
     public void emettreMessage(String message) throws InterruptedException, RemoteException, AbriException, NoeudCentralException {
-            controleur.demanderSectionCritique();
+            noeudCentral.askSC(this.url);
             semaphore.acquire();
             System.out.println(url + ": \tEntree en section critique");
             System.out.println(url + " est dans le groupe " + abri.donnerGroupe());

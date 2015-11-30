@@ -103,10 +103,20 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
 
     /**
      * Permet de prévenir un abri qu'il obtient la SC
-     * @param numeroAbri numéro de l'abri à informer
+     * @param urlAbri numéro de l'abri à informer
      */
-    public void obtientSC(String numeroAbri){
+    public void obtientSC(String urlAbri){
         //TODO trouver le moyen d'envoyer ce truc à l'abri
+        abris.chercherUrl(urlAbri).recevoirAutorisation();
+    }
+
+    /**
+     * Lorsqu'un abris demande la SC
+     * @param urlAbri
+     */
+    @Override
+    public void askSC(String urlAbri){
+        lamport.demandeSectionCritique(urlAbri);
     }
 
 }

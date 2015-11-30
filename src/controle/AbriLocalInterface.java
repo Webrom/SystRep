@@ -6,12 +6,12 @@
 package controle;
 
 import modele.AbriException;
+import modele.Annuaire;
+import modele.NoeudCentralException;
+
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import modele.Annuaire;
-import modele.NoeudCentralException;
 
 /**
  *
@@ -35,8 +35,6 @@ public interface AbriLocalInterface {
     public void enregistrerAbri(String url, String groupe, AbriRemoteInterface distant);
     
     public void supprimerAbri(String url);
-    
-    public void recevoirAutorisation();
 
     public void changerGroupe(String groupe);
     

@@ -5,14 +5,15 @@
  */
 package controle;
 
+import modele.AbriException;
+import modele.Message;
+import modele.NoeudCentralException;
+
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import modele.AbriException;
-import modele.Message;
-import modele.NoeudCentralException;
 
 /**
  *
@@ -28,5 +29,7 @@ public interface NoeudCentralRemoteInterface extends Remote {
     public void enregisterAbri(String url) throws RemoteException, NotBoundException, MalformedURLException;
     
     public void supprimerAbri(String url) throws RemoteException;
+
+    public void askSC(String url);
     
 }
