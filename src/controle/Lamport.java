@@ -4,6 +4,7 @@ import modele.AbriException;
 import modele.AbrisLamport;
 import modele.InfosMsgAbri;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Objects;
 /**
  * Created by azank on 27/11/2015.
  */
-public class Lamport implements LamportInterface {
+public class Lamport {
     private NoeudCentralBackend noeudCentralBackend;
     private int clock;
     private List<AbrisLamport> listeGestionAbris;
@@ -36,8 +37,8 @@ public class Lamport implements LamportInterface {
         this.listeGestionAbris = new ArrayList<>();
     }
 
-    @Override
-    public void demandeSectionCritique(String urlAbri) throws AbriException {
+
+    public void demandeSectionCritique(String urlAbri) throws AbriException, RemoteException {
         if(findAbris(urlAbri).getInfo()!=InfosMsgAbri.REQ){
             changeAbriInfo(InfosMsgAbri.REQ,urlAbri);
         }
@@ -53,8 +54,8 @@ public class Lamport implements LamportInterface {
         }
     }
 
-    @Override
-    public void finSectionCritique(String urlAbri) throws AbriException {
+
+    public void finSectionCritique(String urlAbri) throws AbriException, RemoteException {
         changeAbriInfo(InfosMsgAbri.REL,urlAbri);
         sc = false;
         if(Objects.equals(urlAbri, this.abrisSC) && !sc){
