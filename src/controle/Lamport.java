@@ -6,6 +6,8 @@ import modele.InfosMsgAbri;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+
 /**
  * Created by azank on 27/11/2015.
  */
@@ -13,12 +15,13 @@ public class Lamport implements LamportInterface {
     private NoeudCentralBackend noeudCentralBackend;
     private int clock;
     private List<AbrisLamport> listeGestionAbris;
-    private boolean abrisSC;
+    private boolean sc;
+    private String abrisSC;
 
     public Lamport(NoeudCentralBackend noeudCentralBackend) {
         this.noeudCentralBackend = noeudCentralBackend;
         this.clock=0;
-        this.abrisSC=false;
+        this.sc =false;
         this.listeGestionAbris = new ArrayList<>();
         this.noeudCentralBackend = noeudCentralBackend;
     }
@@ -28,7 +31,7 @@ public class Lamport implements LamportInterface {
      */
     public Lamport() {
         this.clock=0;
-        this.abrisSC=false;
+        this.sc =false;
         this.listeGestionAbris = new ArrayList<>();
     }
 
@@ -37,29 +40,36 @@ public class Lamport implements LamportInterface {
         if(findAbris(urlAbri).getInfo()!=InfosMsgAbri.REQ){
             changeAbriInfo(InfosMsgAbri.REQ,urlAbri);
         }
-        if(!abrisSC){
+        if(!sc){
+            //utilisé pour les tests
             try {
                 noeudCentralBackend.obtientSC(urlAbri);
             }catch (NullPointerException error){
                 System.out.println(urlAbri + "est en section critique");
             }
-            this.abrisSC = true;
+            this.sc = true;
+            this.abrisSC = urlAbri;
         }
     }
 
     @Override
     public void finSectionCritique(String urlAbri) {
         changeAbriInfo(InfosMsgAbri.REL,urlAbri);
-        AbrisLamport abri = getMinReq();
-        if (abri != null){
+        sc = false;
+        if(Objects.equals(urlAbri, this.abrisSC) && !sc){
             try {
-                noeudCentralBackend.obtientSC(abri.getUrlAbri());
-            }catch (NullPointerException error){
-                System.out.println(abri.getUrlAbri() + "est en section critique");
+                AbrisLamport abri = getMinReq();
+                //utilisé pour les tests
+                try {
+                    noeudCentralBackend.obtientSC(abri.getUrlAbri());
+                }catch (NullPointerException error){
+                    System.out.println(abri.getUrlAbri() + "est en section critique");
+                }
+                this.sc = true;
+                this.abrisSC = abri.getUrlAbri();
+            }catch(NullPointerException e){
+                System.out.println(e.toString());
             }
-            this.abrisSC = true;
-        }else{
-            this.abrisSC=false;
         }
     }
 
@@ -89,7 +99,7 @@ public class Lamport implements LamportInterface {
             boolean find = false;
             while (i.hasNext() && !find){
                 AbrisLamport tamponAbri = i.next();
-                if(tamponAbri.getUrlAbri()==urlAbris){
+                if(Objects.equals(tamponAbri.getUrlAbri(), urlAbris)){
                     abri = tamponAbri;
                     find = true;
                 }
@@ -122,8 +132,10 @@ public class Lamport implements LamportInterface {
         AbrisLamport a = null;
         int min = clock;
         for(AbrisLamport abri : this.listeGestionAbris){
-            min = (abri.getClock()<=min)?abri.getClock():min;
-            a = (abri.getInfo()== InfosMsgAbri.REQ && abri.getClock()<=min)?findAbris(abri.getUrlAbri()):null;
+            if(abri.getClock()<=min && abri.getInfo() == InfosMsgAbri.REQ){
+                a = findAbris(abri.getUrlAbri());
+                min = abri.getClock();
+            }
         }
         return a;
     }

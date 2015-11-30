@@ -7,10 +7,19 @@ public class TestLamport {
     public static void main(String[] args) {
         System.out.println("test lamport");
         Lamport lamport = new Lamport();
-        lamport.demandeSectionCritique("45");
-        lamport.demandeSectionCritique("31");
-        lamport.demandeSectionCritique("45");
-        lamport.finSectionCritique("45");
+        for (int i = 0; i <10; i++) {
+            lamport.demandeSectionCritique("process"+i);
+            if(i==3){
+                lamport.finSectionCritique("process0");
+                lamport.affiche();
+                lamport.demandeSectionCritique("process0");
+                lamport.affiche();
+            }else if(i==4){
+                lamport.finSectionCritique("process1");
+            }
+        }
+        lamport.finSectionCritique("process9");
+        lamport.finSectionCritique("process2");
         lamport.affiche();
     }
 }
