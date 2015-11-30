@@ -108,9 +108,9 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
                         System.out.println("avant sem");
                         semaphore.acquire();
                         System.out.println("apres sem");
+                        noeudCentral.rendSC(url);
                         noeudCentral.connectNewAbri(this.url,this.abri.donnerGroupe());
                         System.out.println("apres connectNewAbri");
-                        noeudCentral.rendSC(url);
                         System.out.println("après rendSC");
                         abri.connecter();
                     }

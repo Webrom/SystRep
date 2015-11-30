@@ -128,7 +128,7 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
     }
 
     @Override
-    public void connectNewAbri(String url, String groupe) throws RemoteException, AbriException, InterruptedException {
+    public synchronized void connectNewAbri(String url, String groupe) throws RemoteException, AbriException, InterruptedException {
         System.out.println("entre dans connectNewAbri");
         for (Map.Entry<String, AbriRemoteInterface> entry:abris.getAbrisDistants().entrySet()) {
             System.out.println("entre dans le for");
