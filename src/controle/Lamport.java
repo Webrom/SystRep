@@ -1,5 +1,6 @@
 package controle;
 
+import modele.AbriException;
 import modele.AbrisLamport;
 import modele.InfosMsgAbri;
 
@@ -36,7 +37,7 @@ public class Lamport implements LamportInterface {
     }
 
     @Override
-    public void demandeSectionCritique(String urlAbri) {
+    public void demandeSectionCritique(String urlAbri) throws AbriException {
         if(findAbris(urlAbri).getInfo()!=InfosMsgAbri.REQ){
             changeAbriInfo(InfosMsgAbri.REQ,urlAbri);
         }
@@ -53,7 +54,7 @@ public class Lamport implements LamportInterface {
     }
 
     @Override
-    public void finSectionCritique(String urlAbri) {
+    public void finSectionCritique(String urlAbri) throws AbriException {
         changeAbriInfo(InfosMsgAbri.REL,urlAbri);
         sc = false;
         if(Objects.equals(urlAbri, this.abrisSC) && !sc){

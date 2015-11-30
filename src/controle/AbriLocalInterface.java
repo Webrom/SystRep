@@ -37,5 +37,7 @@ public interface AbriLocalInterface {
     public void supprimerAbri(String url);
 
     public void changerGroupe(String groupe);
+
+    public void recevoirAutorisation();
     
 }
