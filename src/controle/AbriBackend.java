@@ -89,6 +89,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     @Override
     public void connecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException {
         // Enregistrer dans l'annuaire RMI
+        //TODO modifier la connection d'abri
         Naming.rebind(url, (AbriRemoteInterface) this);
         
         // Enregistrement de tous les autres abris
@@ -132,6 +133,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
         noeudCentral.supprimerAbri(url);
         noeudCentralUrl = "";
         noeudCentral = null;
+        //TODO vider la liste des supers copains !
         
         // Autres abris
         for (AbriRemoteInterface distant : abrisDistants.getAbrisDistants().values()) {
