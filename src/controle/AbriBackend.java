@@ -133,7 +133,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
         noeudCentral.supprimerAbri(url);
         noeudCentralUrl = "";
         noeudCentral = null;
-        //TODO vider la liste des supers copains !
+        copains.clear();
         
         // Autres abris
         for (AbriRemoteInterface distant : abrisDistants.getAbrisDistants().values()) {

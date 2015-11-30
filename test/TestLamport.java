@@ -1,11 +1,13 @@
 import controle.Lamport;
 import modele.AbriException;
 
+import java.rmi.RemoteException;
+
 /**
  * Created by azank on 27/11/2015.
  */
 public class TestLamport {
-    public static void main(String[] args) throws AbriException {
+    public static void main(String[] args) throws AbriException, RemoteException {
         System.out.println("test lamport");
         Lamport lamport = new Lamport();
         for (int i = 0; i <10; i++) {
