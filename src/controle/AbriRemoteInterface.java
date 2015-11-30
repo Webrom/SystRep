@@ -29,5 +29,5 @@ public interface AbriRemoteInterface extends Remote {
 
     public String signalerGroupe() throws RemoteException;
 
-    public void recevoirAutorisation();
+    public void recevoirSC() throws RemoteException;
 }

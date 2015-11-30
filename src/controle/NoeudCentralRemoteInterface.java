@@ -30,6 +30,8 @@ public interface NoeudCentralRemoteInterface extends Remote {
     
     public void supprimerAbri(String url) throws RemoteException;
 
-    public void askSC(String url) throws AbriException;
+    public void askSC(String url) throws AbriException, RemoteException;
+
+    public void rendSC(String url) throws AbriException, RemoteException;
     
 }
