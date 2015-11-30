@@ -17,6 +17,7 @@ public class Lamport implements LamportInterface {
     private int clock;
     private List<AbrisLamport> listeGestionAbris;
     private boolean sc;
+    //ajout pour eviter d'envoyer la sc si le process fin_sc est different de celui qui est en sc
     private String abrisSC;
 
     public Lamport(NoeudCentralBackend noeudCentralBackend) {

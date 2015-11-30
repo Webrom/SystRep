@@ -2,10 +2,12 @@ package controle;
 
 import modele.AbriException;
 
+import java.rmi.Remote;
+
 /**
  * Created by azank on 27/11/2015.
  */
-public interface LamportInterface {
+public interface LamportInterface extends Remote{
     /**
      * Receptionne du demande d'entree en section critique du noeud central de la part d'un processus metier
      * @param urlAbri

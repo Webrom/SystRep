@@ -19,5 +19,5 @@ public class AbriException extends Exception {
     public AbriException(String message) {
         super(message);
     }
-    
+
 }
