@@ -128,7 +128,7 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
     }
 
     @Override
-    public synchronized void connectNewAbri(String url, String groupe) throws RemoteException, AbriException, InterruptedException {
+    public synchronized void connectNewAbri(String url, String groupe) throws RemoteException, AbriException, InterruptedException, MalformedURLException, NotBoundException {
         System.out.println("entre dans connectNewAbri");
         for (Map.Entry<String, AbriRemoteInterface> entry:abris.getAbrisDistants().entrySet()) {
             System.out.println("entre dans le for");
@@ -140,7 +140,19 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
     }
 
     @Override
-    public void replyNewAbri(String urlEmetteur, String urlDistinataire) throws RemoteException, AbriException {
-        abris.chercherUrl(urlDistinataire).updateCopains(urlEmetteur);
+    public void replyNewAbri(String urlEmetteur, String urlDistinataire) throws RemoteException, AbriException, MalformedURLException, NotBoundException {
+        abris.chercherUrl(urlDistinataire).updateCopains(urlEmetteur,false);
     }
+
+    @Override
+    public void deconectAbri(String urlEmetteur) throws RemoteException, AbriException, MalformedURLException, NotBoundException {
+        for (Map.Entry<String, AbriRemoteInterface> entry:abris.getAbrisDistants().entrySet()) {
+            System.out.println("entre dans le for deconection");
+            if(!Objects.equals(entry.getKey(), urlEmetteur)) {
+                entry.getValue().updateCopains(urlEmetteur,true);
+                System.out.println("entre dans le if du foreach deconection");
+            }
+        }
+    }
+
 }

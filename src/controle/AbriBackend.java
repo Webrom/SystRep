@@ -131,21 +131,16 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
      * @throws NotBoundException
      */
     @Override
-    public void deconnecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException {
+    public void deconnecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException, InterruptedException {
+        noeudCentral.askSC(this.url);
+        semaphore.acquire();
+        noeudCentral.deconectAbri(this.url);
+        noeudCentral.rendSC(this.url);
         // noeudCentral
         noeudCentral.supprimerAbri(url);
         noeudCentralUrl = "";
         noeudCentral = null;
         copains.clear();
-        
-        // Autres abris
-        for (AbriRemoteInterface distant : abrisDistants.getAbrisDistants().values()) {
-            try {
-                distant.supprimerAbri(url, controleurUrl);
-            } catch (RemoteException ex) {
-                Logger.getLogger(AbriBackend.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         abrisDistants.vider();
         
         // Abri
@@ -184,10 +179,12 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     }
 
     @Override
-    public void enregistrerAbri(String urlDistant, String groupe) throws AbriException, RemoteException, InterruptedException {
-        
+    public void enregistrerAbri(String urlDistant, String groupe) throws AbriException, RemoteException, InterruptedException, MalformedURLException, NotBoundException {
+        Remote o = Naming.lookup(urlDistant);
+        this.abrisDistants.ajouterAbriDistant(urlDistant,(AbriRemoteInterface) o);
         if (groupe.equals(abri.donnerGroupe()))
         {
+            System.out.println("entre dans le if du enregistrerAbri");
             this.copains.add(urlDistant);
             noeudCentral.askSC(this.url);
             semaphore.acquire();
@@ -199,8 +196,18 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     }
 
     @Override
-    public void updateCopains(String urlEmetteur) throws RemoteException, AbriException {
-        this.copains.add(urlEmetteur);
+    public void updateCopains(String urlEmetteur, boolean type) throws RemoteException, AbriException, MalformedURLException, NotBoundException {
+        if(!type) {
+            Remote o = Naming.lookup(urlEmetteur);
+            this.abrisDistants.ajouterAbriDistant(urlEmetteur, (AbriRemoteInterface) o);
+            System.out.println("entre dans updateCopains");
+            this.copains.add(urlEmetteur);
+        }
+        else {
+            Remote o = Naming.lookup(urlEmetteur);
+            this.abrisDistants.retirerAbriDistant(urlEmetteur);
+            this.copains.remove(urlEmetteur);
+        }
     }
 
     @Override
