@@ -71,7 +71,6 @@ public class Lamport {
     public void finSectionCritique(String urlAbri) throws AbriException, RemoteException {
         changeAbriInfo(InfosMsgAbri.REL,urlAbri);
         if(Objects.equals(urlAbri, this.abrisSC)){
-            sc = false;
             System.out.println("LAMPORT--------"+urlAbri + "REND LA SC--------");
             AbrisLamport abri = getMinReq();
             if(abri!=null) {
@@ -86,7 +85,8 @@ public class Lamport {
                     affiche();
                     System.out.println(abri.getUrlAbri() + " est en section critique \n");
                 }
-            }
+            }else
+                sc = false;
         }
     }
 
