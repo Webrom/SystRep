@@ -52,6 +52,7 @@ public class Lamport {
             //utilisé pour les tests
             try {
                 noeudCentralBackend.obtientSC(urlAbri);
+                System.out.println("LAMPORT--------"+urlAbri + "A LA SC--------");
             }catch (NullPointerException error){
                 System.out.println(urlAbri + " est en section critique");
                 affiche();
@@ -71,6 +72,7 @@ public class Lamport {
         changeAbriInfo(InfosMsgAbri.REL,urlAbri);
         if(Objects.equals(urlAbri, this.abrisSC)){
             sc = false;
+            System.out.println("LAMPORT--------"+urlAbri + "REND LA SC--------");
             AbrisLamport abri = getMinReq();
             if(abri!=null) {
                 this.sc = true;
@@ -78,6 +80,7 @@ public class Lamport {
                 try {
                     //utilisé pour les tests
                     noeudCentralBackend.obtientSC(abri.getUrlAbri());
+                    System.out.println("LAMPORT--------"+abri.getUrlAbri() + "A LA SC--------");
                 } catch (NullPointerException e) {
                     System.out.println(urlAbri + " sort de la sc");
                     affiche();
