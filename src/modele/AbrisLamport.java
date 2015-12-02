@@ -1,7 +1,7 @@
 package modele;
 
 /**
- *
+ * Classe utilisée par Lamport pour stocker les informations de demande et fin SC des abris
  * Created by azank on 27/11/2015.
  */
 public class AbrisLamport {
