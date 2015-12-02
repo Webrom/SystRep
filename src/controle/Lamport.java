@@ -85,7 +85,7 @@ public class Lamport {
                     affiche();
                     System.out.println(abri.getUrlAbri() + " est en section critique \n");
                 }
-            }else
+            }else //personne n'est en attente de la section critique
                 sc = false;
         }
     }
