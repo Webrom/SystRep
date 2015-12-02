@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * Controleur du noeud central, cette classe gère la section critique
  * Created by azank on 27/11/2015.
  */
 public class Lamport {
@@ -37,7 +38,12 @@ public class Lamport {
         this.listeGestionAbris = new ArrayList<>();
     }
 
-
+    /**
+     * Receptionne du demande d'entree en section critique du noeud central de la part d'un processus metier
+     * @param urlAbri : url de l'abris
+     * @throws AbriException
+     * @throws RemoteException
+     */
     public void demandeSectionCritique(String urlAbri) throws AbriException, RemoteException {
         if(findAbris(urlAbri).getInfo()!=InfosMsgAbri.REQ){
             changeAbriInfo(InfosMsgAbri.REQ,urlAbri);
@@ -54,7 +60,12 @@ public class Lamport {
         }
     }
 
-
+    /**
+     *  Receptionne la notification du noeud central  de la sortie de la section critique d'un processus metier
+     * @param urlAbri : url de l'abris
+     * @throws AbriException
+     * @throws RemoteException
+     */
     public void finSectionCritique(String urlAbri) throws AbriException, RemoteException {
         System.out.println("debut finsectionCritique Lamport");
         changeAbriInfo(InfosMsgAbri.REL,urlAbri);
@@ -143,6 +154,9 @@ public class Lamport {
         return a;
     }
 
+    /**
+     * Fonction utilisée pour le test de lamport
+     */
     public void affiche(){
         System.out.println("liste gestion :");
         for(AbrisLamport abri : this.listeGestionAbris){
