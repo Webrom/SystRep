@@ -226,6 +226,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
 
         if (groupe.equals(abri.donnerGroupe()))
         {
+            //TODO Maybe problème semaphore
             Remote o = Naming.lookup(urlDistant);
             this.abrisDistants.ajouterAbriDistant(urlDistant,(AbriRemoteInterface) o);
             System.out.println("entre dans le if du enregistrerAbri");
