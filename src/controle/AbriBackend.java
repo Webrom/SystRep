@@ -180,10 +180,11 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
 
     @Override
     public void enregistrerAbri(String urlDistant, String groupe) throws AbriException, RemoteException, InterruptedException, MalformedURLException, NotBoundException {
-        Remote o = Naming.lookup(urlDistant);
-        this.abrisDistants.ajouterAbriDistant(urlDistant,(AbriRemoteInterface) o);
+
         if (groupe.equals(abri.donnerGroupe()))
         {
+            Remote o = Naming.lookup(urlDistant);
+            this.abrisDistants.ajouterAbriDistant(urlDistant,(AbriRemoteInterface) o);
             System.out.println("entre dans le if du enregistrerAbri");
             this.copains.add(urlDistant);
             noeudCentral.askSC(this.url);
@@ -259,6 +260,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     @Override
     public void changerGroupe(String groupe)
     {
+        //TODO modifier à la connexion
         abri.definirGroupe(groupe);
     }
     
