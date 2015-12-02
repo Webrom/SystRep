@@ -33,4 +33,8 @@ public interface AbriLocalInterface {
     public void emettreMessage(String message) throws InterruptedException, RemoteException, AbriException, NoeudCentralException;
 
     public void changerGroupe(String groupe);
+
+    public void askSC() throws InterruptedException, AbriException, RemoteException;
+
+    public void rendreSC() throws AbriException, RemoteException;
 }

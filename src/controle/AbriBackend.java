@@ -33,7 +33,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     protected Annuaire abrisDistants;    // Map faisant le lien entre les url et les interfaces RMI des abris distants
     protected ArrayList<String> copains; // Les urls des autres membres du groupe de l'abri courant // Pas dans l'annuaire -> imposer la gestion d'une liste locale aux abris pour les groupes
     
-    protected Semaphore semaphore;
+    protected Semaphore semaphore,canAskSC;
     
     public AbriBackend(String _url, Abri _abri) throws RemoteException, MalformedURLException {
         
@@ -48,6 +48,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
         this.copains = new ArrayList<String>();
         
         this.semaphore = new Semaphore(0, true);
+        this.canAskSC = new Semaphore(1,true);
     }
     
     /**
@@ -113,11 +114,11 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
                         this.noeudCentralUrl = name;
                         noeudCentral = (NoeudCentralRemoteInterface) o;
                         noeudCentral.enregisterAbri(url);
-                        noeudCentral.askSC(url);
+                        this.askSC();
                         System.out.println("avant sem");
                         semaphore.acquire();
                         System.out.println("apres sem");
-                        noeudCentral.rendSC(url);
+                        this.rendreSC();
                         noeudCentral.connectNewAbri(this.url,this.abri.donnerGroupe());
                         System.out.println("apres connectNewAbri");
                         System.out.println("après rendSC");
@@ -148,10 +149,10 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
      */
     @Override
     public void deconnecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException, InterruptedException {
-        noeudCentral.askSC(this.url);
+        this.askSC();
         semaphore.acquire();
         noeudCentral.deconectAbri(this.url);
-        noeudCentral.rendSC(this.url);
+        this.rendreSC();
         // noeudCentral
         noeudCentral.supprimerAbri(url);
         noeudCentralUrl = "";
@@ -193,14 +194,14 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
      */
     @Override
     public void emettreMessage(String message) throws InterruptedException, RemoteException, AbriException, NoeudCentralException {
-            noeudCentral.askSC(this.url);
+            this.askSC();
             semaphore.acquire();
             System.out.println(url + ": \tEntree en section critique");
             System.out.println(url + " est dans le groupe " + abri.donnerGroupe());
             System.out.println(url + ": \tEmission vers " + copains.toString() + ": " + message);
             noeudCentral.modifierAiguillage(url, copains);
             noeudCentral.transmettre(new Message(url, copains, message));
-            noeudCentral.rendSC(this.url);
+            this.rendreSC();
             System.out.println(url + ": \tSortie de la section critique");
     }
 
@@ -231,10 +232,14 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
             this.abrisDistants.ajouterAbriDistant(urlDistant,(AbriRemoteInterface) o);
             System.out.println("entre dans le if du enregistrerAbri");
             this.copains.add(urlDistant);
-            noeudCentral.askSC(this.url);
+            System.out.println("ajouter à copain passé");
+            this.askSC();
+            System.out.println("askSC passé");
             semaphore.acquire();
+            System.out.println("semaphore.acquire passé");
             noeudCentral.replyNewAbri(this.url,urlDistant);
-            noeudCentral.rendSC(this.url);
+            this.rendreSC();
+            System.out.println("rendre SC passé");
         }
         
         System.out.println(url + ": \tEnregistrement de l'abri " + urlDistant);
@@ -286,5 +291,24 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
         abri.definirGroupe(groupe);
     }
 
+    @Override
+    public void askSC() throws InterruptedException, AbriException, RemoteException {
 
+        System.out.println("entre dans askSC");
+        System.out.println(canAskSC.toString());
+        canAskSC.acquire();
+        System.out.println("a passé canAskSC.acquire");
+        noeudCentral.askSC(this.url);
+        System.out.println("demande au noeud central envoyé");
+    }
+
+    @Override
+    public void rendreSC() throws AbriException, RemoteException {
+        noeudCentral.rendSC(this.url);
+        System.out.println("rendSC passé");
+        System.out.println(canAskSC.toString());
+        canAskSC.release();
+        System.out.println(canAskSC.toString());
+        System.out.println("canAskSC.release passé");
+    }
 }
