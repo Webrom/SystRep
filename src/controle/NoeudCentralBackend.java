@@ -68,11 +68,11 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
     }
 
     @Override
-    public synchronized void transmettre(Message message) throws RemoteException, AbriException, NoeudCentralException {
+    public synchronized void transmettre(Message message, String url) throws RemoteException, AbriException, NoeudCentralException {
         try {
             noeudCentral.demarrerTransmission();
             
-            System.out.println(url + ": \tTransmission du message \"" + message.toString() + "\"");
+            System.out.println(this.url + ": \tTransmission du message \"" + message.toString() + "\"");
             
             ArrayList<String> abrisCible = noeudCentral.getVersUrl();
             Iterator<String> itr = abrisCible.iterator();
@@ -87,18 +87,19 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
             throw ex;
         } finally {
             noeudCentral.stopperTransmission();
+            abris.chercherUrl(url).rendreSC();
         }
     }
 
     @Override
-    public synchronized void enregisterAbri(String urlAbriDistant) throws RemoteException, NotBoundException, MalformedURLException {
+    public void enregisterAbri(String urlAbriDistant) throws RemoteException, NotBoundException, MalformedURLException {
         System.out.println(url + ": \tEnregistrement de l'abri dans l'annuaire " + urlAbriDistant);
         AbriRemoteInterface abriDistant = (AbriRemoteInterface) Naming.lookup(urlAbriDistant);
         abris.ajouterAbriDistant(urlAbriDistant, abriDistant);
     }
 
     @Override
-    public synchronized void supprimerAbri(String urlAbriDistant) throws RemoteException {
+    public void supprimerAbri(String urlAbriDistant) throws RemoteException {
         System.out.println(url + ": \tSuppression de l'abri de l'annuaire " + urlAbriDistant);
         abris.retirerAbriDistant(urlAbriDistant);
     }
@@ -108,8 +109,8 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
      * @param urlAbri numéro de l'abri à informer
      */
     public void obtientSC(String urlAbri) throws AbriException, RemoteException {
+        System.out.println(urlAbri+" vient d'obtenir la section critique");
         abris.chercherUrl(urlAbri).recevoirSC();
-        System.out.println("SC obtenue : "+urlAbri);
     }
 
     /**
@@ -118,6 +119,7 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
      */
     @Override
     public void askSC(String urlAbri) throws RemoteException, AbriException {
+        System.out.println(urlAbri+" demande la SC");
         lamport.demandeSectionCritique(urlAbri);
     }
 
@@ -129,8 +131,8 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
      */
     @Override
     public void rendSC(String url) throws AbriException, RemoteException{
+        System.out.println(url+" demande à rendre la SC");
         lamport.finSectionCritique(url);
-        System.out.println("dans rendSC");
     }
 
     /**
@@ -145,12 +147,9 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
      */
     @Override
     public void connectNewAbri(String url, String groupe) throws RemoteException, AbriException, InterruptedException, MalformedURLException, NotBoundException {
-        System.out.println("entre dans connectNewAbri");
         for (Map.Entry<String, AbriRemoteInterface> entry:abris.getAbrisDistants().entrySet()) {
-            System.out.println("entre dans le for");
             if(!Objects.equals(entry.getKey(), url)) {
                 entry.getValue().enregistrerAbri(url, groupe);
-                System.out.println("entre dans le if du foreach");
             }
         }
     }
@@ -180,10 +179,8 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
     @Override
     public void deconectAbri(String urlEmetteur) throws RemoteException, AbriException, MalformedURLException, NotBoundException {
         for (Map.Entry<String, AbriRemoteInterface> entry:abris.getAbrisDistants().entrySet()) {
-            System.out.println("entre dans le for deconection");
             if(!Objects.equals(entry.getKey(), urlEmetteur)) {
                 entry.getValue().updateCopains(urlEmetteur,true);
-                System.out.println("entre dans le if du foreach deconection");
             }
         }
     }

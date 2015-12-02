@@ -26,4 +26,6 @@ public interface AbriRemoteInterface extends Remote {
     public void recevoirSC() throws RemoteException;
 
     public void updateCopains(String urlEmetteur, boolean type) throws RemoteException, AbriException, MalformedURLException, NotBoundException;
+
+    public void rendreSC() throws AbriException, RemoteException;
 }

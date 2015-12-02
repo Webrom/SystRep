@@ -52,6 +52,7 @@ public class NoeudCentral extends Observable {
     }
     
     public void stopperTransmission() {
+        System.out.println("entre dans stopper transmission");
         transmissionEnCours = false;
         notifierObservateurs();
     }

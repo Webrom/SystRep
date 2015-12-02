@@ -35,6 +35,4 @@ public interface AbriLocalInterface {
     public void changerGroupe(String groupe);
 
     public void askSC() throws InterruptedException, AbriException, RemoteException;
-
-    public void rendreSC() throws AbriException, RemoteException;
 }

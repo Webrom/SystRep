@@ -24,7 +24,7 @@ public interface NoeudCentralRemoteInterface extends Remote {
     
     public void modifierAiguillage(String depuisUrl, ArrayList<String> versListeUrl) throws RemoteException, NoeudCentralException;
     
-    public void transmettre(Message message) throws RemoteException, AbriException, NoeudCentralException;
+    public void transmettre(Message message, String url) throws RemoteException, AbriException, NoeudCentralException;
     
     public void enregisterAbri(String url) throws RemoteException, NotBoundException, MalformedURLException;
     
