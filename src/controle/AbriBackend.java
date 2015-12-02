@@ -15,8 +15,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -30,7 +28,6 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     protected String noeudCentralUrl;
 
     protected Abri abri;
-    final protected ControleurInterface controleur;
     protected NoeudCentralRemoteInterface noeudCentral;
     
     protected Annuaire abrisDistants;    // Map faisant le lien entre les url et les interfaces RMI des abris distants
@@ -45,7 +42,6 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
         this.noeudCentralUrl = "";
         
         this.abri = _abri;
-        this.controleur = new SimplisteControleur(controleurUrl, this);
         this.noeudCentral = null;
         
         this.abrisDistants = new Annuaire();
@@ -140,6 +136,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
         noeudCentral.supprimerAbri(url);
         noeudCentralUrl = "";
         noeudCentral = null;
+        //Dans le code fourni au départ, il n'était pas prévu de vider la liste de copains. Du coup en changeant de groupe on continuait à envoyer au précédent groupe
         copains.clear();
         abrisDistants.vider();
         
@@ -212,62 +209,16 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     }
 
     @Override
-    public synchronized void supprimerAbri(String urlDistant) {
-        System.out.println(url + ": \tOubli de l'abri " + urlDistant);
-        abrisDistants.retirerAbriDistant(urlDistant);
-        if (copains.contains(urlDistant))
-        {
-            copains.remove(urlDistant);
-        }
-    }
-    
-    @Override
-    public synchronized void supprimerAbri(String urlAbriDistant, String urlControleurDistant) {
-        try {
-            AbriRemoteInterface o = (AbriRemoteInterface) Naming.lookup(urlAbriDistant);
-            AbriBackend.this.supprimerAbri(urlAbriDistant);
-            supprimerControleur(urlControleurDistant);
-            o.supprimerControleur(controleurUrl);
-        } catch (NotBoundException ex) {
-            Logger.getLogger(AbriBackend.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(AbriBackend.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(AbriBackend.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @Override
-    public synchronized void enregistrerControleur(String urlDistante, String groupe) {
-        controleur.enregistrerControleur(urlDistante, groupe);
-    }
-
-    @Override
-    public synchronized void supprimerControleur(String urlDistante) {
-        controleur.supprimerControleur(urlDistante);
-    }
-
-    @Override
-    public synchronized void recevoirAutorisation() {
-        semaphore.release();
-    }
-
-    @Override
     public synchronized void recevoirSC() throws RemoteException {
         semaphore.release();
     }
-    
+
     @Override
     public void changerGroupe(String groupe)
     {
         //TODO modifier à la connexion
         abri.definirGroupe(groupe);
     }
-    
-    @Override
-    public String signalerGroupe() throws RemoteException
-    {
-        return abri.donnerGroupe();
-    }
-    
+
+
 }

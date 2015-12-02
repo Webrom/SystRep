@@ -20,16 +20,8 @@ import java.rmi.RemoteException;
 public interface AbriRemoteInterface extends Remote {
 
     public void enregistrerAbri(String urlAbriDistant, String groupe) throws RemoteException, AbriException, InterruptedException, MalformedURLException, NotBoundException;
-    
-    public void supprimerAbri(String urlAbriDistant, String urlControleurDistant) throws RemoteException;
-
-    public void enregistrerControleur(String urlControleurDistant, String groupe) throws RemoteException;
-
-    public void supprimerControleur(String urlControleurDistant) throws RemoteException;
 
     public void recevoirMessage(modele.Message transmission) throws RemoteException, AbriException;
-
-    public String signalerGroupe() throws RemoteException;
 
     public void recevoirSC() throws RemoteException;
 

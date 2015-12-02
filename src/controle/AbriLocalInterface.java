@@ -31,13 +31,6 @@ public interface AbriLocalInterface {
     public void deconnecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException, InterruptedException;
     
     public void emettreMessage(String message) throws InterruptedException, RemoteException, AbriException, NoeudCentralException;
-    
-    public void enregistrerAbri(String url, String groupe) throws AbriException, RemoteException, InterruptedException, MalformedURLException, NotBoundException;
-    
-    public void supprimerAbri(String url);
 
     public void changerGroupe(String groupe);
-
-    public void recevoirAutorisation();
-    
 }
