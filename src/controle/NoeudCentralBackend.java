@@ -113,7 +113,7 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
     }
 
     /**
-     * Lorsqu'un abris demande la SC
+     * Lorsqu'un abris demande la SC, nous retransmettons la demande à l'algorithme de Lamport
      * @param urlAbri
      */
     @Override
@@ -121,12 +121,28 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
         lamport.demandeSectionCritique(urlAbri);
     }
 
+    /**
+     * Lorsqu'un abri rend la SC. Nous informons l'algo
+     * @param url url de l'abri qui rend la SC
+     * @throws AbriException
+     * @throws RemoteException
+     */
     @Override
     public void rendSC(String url) throws AbriException, RemoteException{
         lamport.finSectionCritique(url);
         System.out.println("dans rendSC");
     }
 
+    /**
+     * Permet d'envoyer à tous les abris l'informations qu'un nouvel abri s'est connecté
+     * @param url url du nouvel abri
+     * @param groupe groupe du nouvel abri
+     * @throws RemoteException
+     * @throws AbriException
+     * @throws InterruptedException
+     * @throws MalformedURLException
+     * @throws NotBoundException
+     */
     @Override
     public synchronized void connectNewAbri(String url, String groupe) throws RemoteException, AbriException, InterruptedException, MalformedURLException, NotBoundException {
         System.out.println("entre dans connectNewAbri");
@@ -139,11 +155,28 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
         }
     }
 
+    /**
+     * Lorsqu'un abri répond à une nouvel connexion, pour lui informer qu'il est dans son groupe
+     * @param urlEmetteur url de l'abri qui répond
+     * @param urlDistinataire url de l'abri qui doit ajouter l'abri émetteur
+     * @throws RemoteException
+     * @throws AbriException
+     * @throws MalformedURLException
+     * @throws NotBoundException
+     */
     @Override
     public void replyNewAbri(String urlEmetteur, String urlDistinataire) throws RemoteException, AbriException, MalformedURLException, NotBoundException {
         abris.chercherUrl(urlDistinataire).updateCopains(urlEmetteur,false);
     }
 
+    /**
+     * Permet d'informer tous les abris qu'il se déconnecte
+     * @param urlEmetteur url de l'abri qui se déconnecte
+     * @throws RemoteException
+     * @throws AbriException
+     * @throws MalformedURLException
+     * @throws NotBoundException
+     */
     @Override
     public void deconectAbri(String urlEmetteur) throws RemoteException, AbriException, MalformedURLException, NotBoundException {
         for (Map.Entry<String, AbriRemoteInterface> entry:abris.getAbrisDistants().entrySet()) {

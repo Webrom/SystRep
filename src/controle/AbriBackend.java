@@ -82,6 +82,19 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
         return abrisDistants;
     }
 
+    /**
+     * Permet de connecter un abri.
+     * Récupère une interface RMI du noeud central.
+     * Demande la SC
+     * L'obtient
+     * Rend la SC (pour éviter un interblocage avec la réponse des autres)
+     * Demande au noeud central d'envoyer un message à tous les autres pour dire qu'il est connecté.
+     * @throws AbriException
+     * @throws RemoteException
+     * @throws MalformedURLException
+     * @throws NotBoundException
+     * @throws InterruptedException
+     */
     @Override
     public void connecterAbri() throws AbriException, RemoteException, MalformedURLException, NotBoundException, InterruptedException {
         // Enregistrer dans l'annuaire RMI
@@ -120,7 +133,14 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     }
 
     /**
-     *
+     * Permet de déconnecter l'abri.
+     * Demain la SC
+     * L'obtient
+     * Il demande au noeud central d'envoyer à tous le monde qu'il se déconnecte
+     * Rend la SC
+     * Dit au noeud central de le supprimer de l'annuaire
+     * Le noeud central devient nul (vu que l'abri est déconnecté)
+     * Vide la l'annuaire et la liste de copain.
      * @throws AbriException
      * @throws RemoteException
      * @throws MalformedURLException
@@ -148,7 +168,7 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
     }
 
     /**
-     *
+     * Implémenté dans le code fourni
      * @param message
      * @throws RemoteException
      * @throws AbriException
@@ -162,6 +182,15 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
         abri.ajouterMessage(message);
     }
 
+    /**
+     * Nous avons gardé le code d'origine.
+     * Nous avons juste ajouté le fait de demander la SC avant d'émettre le message.
+     * @param message
+     * @throws InterruptedException
+     * @throws RemoteException
+     * @throws AbriException
+     * @throws NoeudCentralException
+     */
     @Override
     public void emettreMessage(String message) throws InterruptedException, RemoteException, AbriException, NoeudCentralException {
             noeudCentral.askSC(this.url);
@@ -175,6 +204,23 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
             System.out.println(url + ": \tSortie de la section critique");
     }
 
+    /**
+     * Cette fonction est appelé lorsque le noeud central nous informe qu'un nouvel abri est connecté.
+     * Si le nouvel abri est dans le même groupe que nous, alors :
+     * Nous l'ajoutons à la liste de copain
+     * Nous l'ajoutons à l'annuaire local (nous le faisons uniquement pour la vue, autrement ça nous sert à rien)
+     * Demande de la SC
+     * Utilise le sémaphore
+     * Envoie au noeud central un message de réponse avec son url, pour que le nouvel abri le connaisse
+     * Rend la SC
+     * @param urlDistant
+     * @param groupe
+     * @throws AbriException
+     * @throws RemoteException
+     * @throws InterruptedException
+     * @throws MalformedURLException
+     * @throws NotBoundException
+     */
     @Override
     public void enregistrerAbri(String urlDistant, String groupe) throws AbriException, RemoteException, InterruptedException, MalformedURLException, NotBoundException {
 
@@ -193,6 +239,16 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
         System.out.println(url + ": \tEnregistrement de l'abri " + urlDistant);
     }
 
+    /**
+     * Permet de mettre à jour la liste de copain.
+     * Selon le type, ça signifie que c'est une réponse de connexion (donc à ajouter) ou une déconnexion (à supprimer).
+     * @param urlEmetteur
+     * @param type
+     * @throws RemoteException
+     * @throws AbriException
+     * @throws MalformedURLException
+     * @throws NotBoundException
+     */
     @Override
     public void updateCopains(String urlEmetteur, boolean type) throws RemoteException, AbriException, MalformedURLException, NotBoundException {
         if(!type) {
@@ -208,11 +264,20 @@ public class AbriBackend extends UnicastRemoteObject implements AbriLocalInterfa
         }
     }
 
+    /**
+     * Appelé par le noeud central.
+     * Permet d'indiquer que l'on obtient la SC, et donc imcrémenter de 1 le sémaphore.
+     * @throws RemoteException
+     */
     @Override
     public synchronized void recevoirSC() throws RemoteException {
         semaphore.release();
     }
 
+    /**
+     * Utilisée par la vue pour mettre à jour le groupe de l'abri lorsque nous choisissons avant de se connecter.
+     * @param groupe
+     */
     @Override
     public void changerGroupe(String groupe)
     {
