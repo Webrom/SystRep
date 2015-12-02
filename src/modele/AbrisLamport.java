@@ -15,22 +15,39 @@ public class AbrisLamport {
         this.clock = clock;
     }
 
+    /**
+     * @return String : url de l'abris
+     */
     public String getUrlAbri() {
         return urlAbri;
     }
 
+    /**
+     * @return InfoMsgAbri : message d'information
+     */
     public InfosMsgAbri getInfo() {
         return info;
     }
 
+    /**
+     * Change le message d'information
+     * @param info : InfosMsgAbri
+     */
     public void setInfo(InfosMsgAbri info) {
         this.info = info;
     }
 
+    /**
+     * @return int : horloge de lamport
+     */
     public int getClock() {
         return clock;
     }
 
+    /**
+     * Change l'horloge de lamport
+     * @param clock : int
+     */
     public void setClock(int clock) {this.clock = clock;}
 
     @Override

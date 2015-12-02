@@ -8,21 +8,23 @@ import java.rmi.RemoteException;
  */
 public class TestLamport {
     public static void main(String[] args) throws AbriException, RemoteException {
+        final String process = "process";
         System.out.println("test lamport");
         Lamport lamport = new Lamport();
         for (int i = 0; i <10; i++) {
-            lamport.demandeSectionCritique("process"+i);
+            System.out.println("Ajout d'une demande de processus");
+            lamport.demandeSectionCritique(process+i);
             if(i==3){
-                lamport.finSectionCritique("process0");
-                lamport.affiche();
-                lamport.demandeSectionCritique("process0");
-                lamport.affiche();
+                lamport.finSectionCritique(process+"0");
+                lamport.demandeSectionCritique(process+"0");
             }else if(i==4){
-                lamport.finSectionCritique("process1");
+                lamport.finSectionCritique(process+"1");
+                lamport.finSectionCritique(process+"3");
             }
         }
-        lamport.finSectionCritique("process9");
-        lamport.finSectionCritique("process2");
+        lamport.finSectionCritique(process+"9");
+        lamport.finSectionCritique(process+"2");
+        lamport.finSectionCritique(process+"0");
         lamport.affiche();
     }
 }
