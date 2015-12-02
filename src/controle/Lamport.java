@@ -53,7 +53,8 @@ public class Lamport {
             try {
                 noeudCentralBackend.obtientSC(urlAbri);
             }catch (NullPointerException error){
-                System.out.println(urlAbri + "est en section critique");
+                System.out.println(urlAbri + " est en section critique");
+                affiche();
             }
             this.sc = true;
             this.abrisSC = urlAbri;
@@ -67,24 +68,23 @@ public class Lamport {
      * @throws RemoteException
      */
     public void finSectionCritique(String urlAbri) throws AbriException, RemoteException {
-        System.out.println("debut finsectionCritique Lamport");
         changeAbriInfo(InfosMsgAbri.REL,urlAbri);
-        sc = false;
-        if(Objects.equals(urlAbri, this.abrisSC) && !sc){
-            try {
-                AbrisLamport abri = getMinReq();
-                //utilisé pour les tests
-                if(abri!=null){
+        if(Objects.equals(urlAbri, this.abrisSC)){
+            sc = false;
+            AbrisLamport abri = getMinReq();
+            if(abri!=null) {
+                this.sc = true;
+                this.abrisSC = abri.getUrlAbri();
+                try {
+                    //utilisé pour les tests
                     noeudCentralBackend.obtientSC(abri.getUrlAbri());
-                    this.sc = true;
-                    this.abrisSC = abri.getUrlAbri();
+                } catch (NullPointerException e) {
+                    System.out.println(urlAbri + " sort de la sc");
+                    affiche();
+                    System.out.println(abri.getUrlAbri() + " est en section critique \n");
                 }
-            }catch(NullPointerException e){
-                System.out.println("test "+e.toString());
             }
         }
-        System.out.println("fin de la fonction finsectionCritique Lamport");
-
     }
 
     /**
