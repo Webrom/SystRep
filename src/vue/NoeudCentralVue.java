@@ -152,10 +152,12 @@ public class NoeudCentralVue extends javax.swing.JFrame implements Observer {
             liste.setSelectedIndices(selectedIndices);
             
         } catch (Exception ex) {
+            // ce if n'est jamais utilisé...
             if (listModel.getSize() == 0) {
-        }
-                afficherErreur("Erreur lors de la mise a jour d'une liste", "L'URL \"" + element + "\" n'est pas presente dans la liste.");
             }
+            //Le catach a un problème. Indique qu'un abris n'est pas présent dans la liste alors qu'il est présent.
+               // afficherErreur("Erreur lors de la mise a jour d'une liste", "L'URL \"" + element + "\" n'est pas presente dans la liste.");
+        }
     }
     
     protected void afficherTransmission(boolean transmissionEnCours) {

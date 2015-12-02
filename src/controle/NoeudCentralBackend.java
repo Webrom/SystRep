@@ -87,7 +87,7 @@ public class NoeudCentralBackend extends UnicastRemoteObject implements NoeudCen
             throw ex;
         } finally {
             noeudCentral.stopperTransmission();
-            abris.chercherUrl(url).rendreSC();
+            abris.chercherUrl(url).rendreSC(); //On rend la section critique une fois que la transmission est terminée
         }
     }
 
