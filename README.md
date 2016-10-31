@@ -1,4 +1,7 @@
 ## Presentation
+Java/Java RMI code for a decentralized and distributed system. Communication between fictive atomics shelters. Use of critical section and mutex to make the communications secure and parallel.
+
+## Presentation
 
 Code associe au projet d'algorithmes et Systemes Repartis VaultChat en IMR2.
 L'utilisation de ces sources n'est en rien obligatoire (mais reste fortement 
